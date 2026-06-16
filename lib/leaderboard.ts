@@ -1,5 +1,12 @@
 import type { AuctionStatsPayload } from "@/lib/types";
 
+export type LeaderboardRow = {
+  discordId: string;
+  count: number;
+  displayName?: string;
+  avatarUrl?: string;
+};
+
 export function toLeaderboardRows(stats: AuctionStatsPayload, type: "sellers" | "winners") {
   const raw = stats[type] || {};
   return Object.entries(raw)
@@ -11,7 +18,7 @@ export function toLeaderboardRows(stats: AuctionStatsPayload, type: "sellers" | 
     .sort((a, b) => b.count - a.count);
 }
 
-export function getMyRank(rows: { discordId: string; count: number }[], discordId: string) {
+export function getMyRank(rows: LeaderboardRow[], discordId: string) {
   const index = rows.findIndex(row => row.discordId === discordId);
   return index >= 0 ? index + 1 : null;
 }

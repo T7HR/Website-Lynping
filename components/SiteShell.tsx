@@ -1,90 +1,89 @@
 import Link from "next/link";
 import { avatarUrl } from "@/lib/session";
 import type { DiscordSession, Role } from "@/lib/types";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { ControlPanelDrawer, type ControlPanelItem } from "@/components/ControlPanelDrawer";
+import { LogoutButton } from "@/components/LogoutButton";
 
-const navByRole: Record<Role, { href: string; label: string }[]> = {
-  guest: [
-    { href: "/", label: "หน้าแรก" },
-    { href: "/leaderboard", label: "อันดับ" },
-    { href: "/rules", label: "กฎ" },
-    { href: "/history", label: "วิธีใช้" },
-    { href: "/discord", label: "Discord" },
-  ],
-  user: [
-    { href: "/", label: "หน้าแรก" },
-    { href: "/profile", label: "โปรไฟล์" },
-    { href: "/profile/stats", label: "สถิติ" },
-    { href: "/my-auctions", label: "ที่ฉันลง" },
-    { href: "/my-wins", label: "ที่ฉันชนะ" },
-    { href: "/auction/request", label: "ส่งคำขอ" },
-    { href: "/leaderboard", label: "อันดับ" },
-  ],
+const sideNavByRole: Record<Role, ControlPanelItem[]> = {
+  guest: [],
+  user: [],
   staff: [
-    { href: "/dashboard", label: "Dashboard" },
-    { href: "/dashboard/requests", label: "คำขอ" },
-    { href: "/dashboard/auctions", label: "ประมูล" },
-    { href: "/profile", label: "โปรไฟล์" },
+    { href: "/dashboard", label: "Dashboard", icon: "DB", group: "หลังบ้าน" },
+    { href: "/dashboard/requests", label: "คำขอ", icon: "RQ" },
+    { href: "/dashboard/auctions", label: "ประมูล", icon: "AC" },
+    { href: "/dashboard/transcripts", label: "ประวัติแชท", icon: "TR" },
+    { href: "/dashboard/reports", label: "รายงาน", icon: "RP" },
   ],
   admin: [
-    { href: "/dashboard", label: "Dashboard" },
-    { href: "/dashboard/requests", label: "คำขอ" },
-    { href: "/dashboard/auctions", label: "ประมูล" },
-    { href: "/dashboard/reports", label: "รายงาน" },
-    { href: "/leaderboard", label: "อันดับ" },
+    { href: "/dashboard", label: "Dashboard", icon: "DB", group: "หลังบ้าน" },
+    { href: "/dashboard/requests", label: "คำขอ", icon: "RQ" },
+    { href: "/dashboard/auctions", label: "ประมูล", icon: "AC" },
+    { href: "/dashboard/transcripts", label: "ประวัติแชท", icon: "TR" },
+    { href: "/dashboard/reports", label: "รายงาน", icon: "RP" },
   ],
   owner: [
-    { href: "/owner", label: "Owner" },
-    { href: "/owner/admins", label: "Admin" },
-    { href: "/owner/staff", label: "Staff" },
-    { href: "/owner/logs", label: "Logs" },
-    { href: "/owner/system", label: "System" },
-    { href: "/dashboard", label: "Dashboard" },
-    { href: "/leaderboard", label: "อันดับ" },
+    { href: "/dashboard", label: "Dashboard", icon: "DB", group: "หลังบ้าน" },
+    { href: "/dashboard/requests", label: "คำขอ", icon: "RQ" },
+    { href: "/dashboard/auctions", label: "ประมูล", icon: "AC" },
+    { href: "/dashboard/transcripts", label: "ประวัติแชท", icon: "TR" },
+    { href: "/dashboard/reports", label: "รายงาน", icon: "RP" },
+    { href: "/owner", label: "Owner", icon: "OW", group: "Owner" },
+    { href: "/owner/admins", label: "Admin", icon: "AD" },
+    { href: "/owner/staff", label: "Staff", icon: "ST" },
+    { href: "/owner/logs", label: "Logs", icon: "LG" },
+    { href: "/owner/system", label: "System", icon: "SY" },
   ],
 };
 
 export function SiteShell({ children, session, role }: { children: React.ReactNode; session: DiscordSession | null; role: Role }) {
-  const nav = navByRole[role] || navByRole.guest;
+  const sideNav = sideNavByRole[role] || [];
   const img = avatarUrl(session, 64);
+  const profileHref = session ? "/profile" : "/login";
 
   return (
     <div className="min-h-screen">
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-black/35 backdrop-blur-xl">
+      <header className="sticky top-0 z-50 border-b border-red-300/10 bg-zinc-950/86 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-4 lg:flex-row lg:items-center lg:justify-between">
           <Link href="/" className="flex items-center gap-3">
-            <div className="grid h-11 w-11 place-items-center rounded-2xl bg-indigo-500 font-black">A</div>
+            <img src="/lynping.png?v=1" alt="Lynping Auction" className="h-12 w-12 rounded-lg border border-red-300/20 object-cover" />
             <div>
-              <p className="text-sm text-zinc-400">Discord Auction</p>
-              <h1 className="font-bold">Server Website</h1>
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-red-300/70">Lynping Auction</p>
+              <h1 className="font-black text-white">ร้านประมูล Lynping</h1>
             </div>
           </Link>
 
           <nav className="flex flex-wrap gap-2">
-            {nav.map(item => (
-              <Link key={item.href} href={item.href} className="rounded-xl px-3 py-2 text-sm text-zinc-300 hover:bg-white/10 hover:text-white">
-                {item.label}
-              </Link>
-            ))}
+            <Link href="/" className="rounded-lg px-3 py-2 text-sm font-semibold text-zinc-300 hover:bg-white/10 hover:text-white">หน้าหลัก</Link>
+            <Link href="/leaderboard" className="rounded-lg px-3 py-2 text-sm font-semibold text-zinc-300 hover:bg-white/10 hover:text-white">อันดับ</Link>
+            <Link href={profileHref} className="rounded-lg px-3 py-2 text-sm font-semibold text-zinc-300 hover:bg-white/10 hover:text-white">โปรไฟล์</Link>
+            {sideNav.length > 0 && <ControlPanelDrawer items={sideNav} role={role} />}
           </nav>
 
           <div className="flex items-center gap-3">
             {session ? (
               <>
-                {img ? <img src={img} alt="avatar" className="h-9 w-9 rounded-full" /> : <div className="h-9 w-9 rounded-full bg-zinc-800" />}
+                {img ? <img src={img} alt="avatar" className="h-9 w-9 rounded-lg object-cover" /> : <div className="h-9 w-9 rounded-lg bg-zinc-800" />}
                 <div className="hidden sm:block">
                   <p className="text-sm font-semibold">{session.global_name || session.username}</p>
-                  <p className="text-xs text-indigo-300">{role.toUpperCase()}</p>
+                  <p className="text-xs font-bold text-red-300">{role.toUpperCase()}</p>
                 </div>
-                <Link className="btn-ghost py-2" href="/api/auth/logout">ออก</Link>
+                <ThemeToggle />
+                <LogoutButton />
               </>
             ) : (
-              <Link className="btn-primary py-2" href="/login">Login Discord</Link>
+              <>
+                <ThemeToggle />
+                <Link className="btn-primary py-2" href="/login">Login Discord</Link>
+              </>
             )}
           </div>
         </div>
       </header>
-      <main className="mx-auto max-w-7xl px-4 py-8">{children}</main>
-      <footer className="mx-auto max-w-7xl px-4 py-10 text-sm text-zinc-500">© Discord Auction Website — connected with Nextcord + Supabase JSON mirror</footer>
+      <div className="mx-auto max-w-7xl px-4 py-8">
+        <main className="min-w-0 flex-1">{children}</main>
+      </div>
+      <footer className="mx-auto max-w-7xl border-t border-white/10 px-4 py-10 text-sm text-zinc-500">© Lynping Auction — connected with Nextcord + Supabase JSON mirror</footer>
     </div>
   );
 }

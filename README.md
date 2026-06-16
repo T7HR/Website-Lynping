@@ -1,4 +1,4 @@
-# Discord Auction Linked Website
+# Lynping Auction Linked Website
 
 เว็บ Next.js สำหรับ Vercel ที่เชื่อมกับบอท Nextcord `main.py` โดยใช้ Supabase table เดียวกัน
 
@@ -63,8 +63,12 @@ https://โดเมนของคุณ.vercel.app/api/auth/callback
 DISCORD_CLIENT_ID=xxx
 DISCORD_CLIENT_SECRET=xxx
 DISCORD_REDIRECT_URI=http://localhost:3000/api/auth/callback
+DISCORD_BOT_TOKEN=ใส่ bot token สำหรับดึงชื่อและรูปสมาชิก
+DISCORD_GUILD_ID=ใส่ Discord server ID
 SESSION_SECRET=สุ่มยาวๆ
 ```
+
+`DISCORD_BOT_TOKEN` และ `DISCORD_GUILD_ID` ใช้สำหรับหน้า leaderboard เพื่อเปลี่ยน Discord ID/mention ให้เป็นชื่อสมาชิกใน server และรูปโปรไฟล์จริง ถ้าไม่ใส่ เว็บจะ fallback เป็น Discord ID กับรูป default
 
 ## Deploy Vercel
 

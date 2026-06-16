@@ -18,7 +18,9 @@ values
   ('auction_stats.json', 'auction_stats.json', '{"scoreboard_message_id": null, "sellers": {}, "winners": {}}'::jsonb),
   ('auction_requests.json', 'auction_requests.json', '{}'::jsonb),
   ('auction_results.json', 'auction_results.json', '{}'::jsonb),
+  ('auction_transcripts.json', 'auction_transcripts.json', '{}'::jsonb),
   ('auction_users.json', 'auction_users.json', '[]'::jsonb),
   ('web_bot_settings.json', 'web_bot_settings.json', '{"owner_id":"617690449049681920","admins":{},"staff":{},"staff_manager_ids":["617690449049681920"]}'::jsonb),
-  ('web_audit_logs.json', 'web_audit_logs.json', '[]'::jsonb)
+  ('web_audit_logs.json', 'web_audit_logs.json', '[]'::jsonb),
+  ('web_seller_earnings.json', 'web_seller_earnings.json', '{"users":{},"processed_results":{}}'::jsonb)
 on conflict (key) do nothing;

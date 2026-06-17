@@ -13,7 +13,7 @@ export async function GET() {
   const winners = toLeaderboardRows(stats, "winners");
   return NextResponse.json({
     user: session,
-    role: getRoleForDiscordId(session.id, settings),
+    role: await getRoleForDiscordId(session.id, settings),
     stats: {
       seller_count: sellers.find(x => x.discordId === session.id)?.count || 0,
       winner_count: winners.find(x => x.discordId === session.id)?.count || 0,

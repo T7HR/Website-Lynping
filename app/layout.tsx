@@ -7,7 +7,7 @@ import { getRoleForDiscordId } from "@/lib/roles";
 
 export const metadata: Metadata = {
   title: "Lynping Auction",
-  description: "ร้านประมูล Discord ธีมแดงที่เชื่อมกับบอท Nextcord และ Supabase table เดียวกัน",
+  description: "ร้านประมูล Lynping Auction ร้านประมูลที่ดีที่สุดในตอนนี้!!",
 };
 
 export const dynamic = "force-dynamic";
@@ -15,7 +15,7 @@ export const dynamic = "force-dynamic";
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const session = await getSession();
   const settings = await getWebSettings();
-  const role = session?.id ? getRoleForDiscordId(session.id, settings) : "guest";
+  const role = session?.id ? await getRoleForDiscordId(session.id, settings) : "guest";
 
   return (
     <html lang="th" suppressHydrationWarning>

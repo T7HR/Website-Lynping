@@ -10,7 +10,7 @@ export async function requireUser(minRole: Role = "user") {
   if (!session) redirect("/login");
 
   const settings = await getWebSettings();
-  const role = getRoleForDiscordId(session.id, settings);
+  const role = await getRoleForDiscordId(session.id, settings);
 
   if (!hasRole(role, minRole)) redirect("/unauthorized");
   return { session, role, settings };

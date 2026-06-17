@@ -1,4 +1,4 @@
-export type Role = "guest" | "user" | "staff" | "admin" | "owner";
+export type Role = "guest" | "user" | "staff" | "admin" | "owner" | "owner_dev";
 
 export type DiscordSession = {
   id: string;
@@ -29,6 +29,25 @@ export type WebSettingsPayload = {
   staff_manager_ids: string[];
   updated_at?: string;
   updated_by?: string;
+};
+
+
+export type WebStaffCommand = {
+  id: string;
+  action: "upsert_staff" | "remove_staff";
+  staff_id: string;
+  waiting_category_id?: string;
+  note?: string;
+  actor_id?: string;
+  created_at: string;
+  status?: "pending" | "processed" | "error";
+  processed_at?: string;
+  error?: string;
+};
+
+export type WebStaffCommandsPayload = {
+  commands: WebStaffCommand[];
+  updated_at?: string;
 };
 
 export type AuctionRequestPayload = Record<string, any>;

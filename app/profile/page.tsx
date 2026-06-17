@@ -5,6 +5,7 @@ import { requireUser } from "@/lib/authGuard";
 import { avatarUrl } from "@/lib/session";
 import { getAuctionResults, getAuctionStats, syncSellerEarningsFromResults } from "@/lib/auctionStore";
 import { getMyRank, toLeaderboardRows } from "@/lib/leaderboard";
+import { roleLabel } from "@/lib/roleLabels";
 
 export default async function ProfilePage() {
   const { session, role } = await requireUser("user");
@@ -24,7 +25,7 @@ export default async function ProfilePage() {
         <div className="flex-1">
           <h2 className="text-2xl font-black">{session.global_name || session.username}</h2>
           <p className="text-zinc-400">Discord ID: {session.id}</p>
-          <p className="mt-2"><span className="badge">Role: {role.toUpperCase()}</span></p>
+          <p className="mt-2"><span className="badge">Role: {roleLabel(role)}</span></p>
         </div>
         <Link className="btn-primary" href="/profile/stats">ดูสถิติละเอียด</Link>
       </div>

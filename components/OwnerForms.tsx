@@ -49,13 +49,13 @@ export function AddStaffForm() {
   return (
     <form action={submit} className="card space-y-4 p-5">
       <div>
-        <p className="panel-title">Owner Tool</p>
-        <h2 className="mt-1 text-xl font-black">เพิ่ม Staff</h2>
+        <p className="panel-title">Manager Auction Staff</p>
+        <h2 className="mt-1 text-xl font-black">เพิ่มพนักงานประมูลเข้าระบบ</h2>
       </div>
       <input className="input" name="discord_id" placeholder="Discord user ID" required />
-      <input className="input" name="waiting_category_id" placeholder="Waiting category ID สำหรับ STAFF_WAITING_CATEGORY_MAP" />
+      <input className="input" name="waiting_category_id" placeholder="หมวดหมู่รอส่งของ ( Category ID )" />
       <input className="input" name="note" placeholder="Note" />
-      <button className="btn-primary" disabled={state === "loading"}>{state === "loading" ? "กำลังบันทึก..." : "เพิ่ม Staff"}</button>
+      <button className="btn-primary" disabled={state === "loading"}>{state === "loading" ? "กำลังบันทึก..." : "Add Staff"}</button>
       {state === "error" && <p className="text-sm text-red-300">บันทึกไม่สำเร็จ</p>}
     </form>
   );

@@ -2,7 +2,7 @@ import "server-only";
 import crypto from "node:crypto";
 import { getMirrorPayload, upsertMirrorPayload } from "@/lib/supabaseAdmin";
 import { OWNER_DISCORD_ID } from "@/lib/env";
-import type { AuctionStatsPayload, WebSettingsPayload, AuditLogEntry } from "@/lib/types";
+import type { AuctionStatsPayload, WebSettingsPayload, AuditLogEntry, WebStaffCommand, WebStaffCommandsPayload } from "@/lib/types";
 
 export const FILES = {
   stats: "auction_stats.json",
@@ -15,9 +15,11 @@ export const FILES = {
   staffIdle: "auction_staff_idle.json",
   dailyReport: "auction_daily_report.json",
   webSettings: "web_bot_settings.json",
+  staffCommands: "web_staff_commands.json",
   auditLogs: "web_audit_logs.json",
   sellerEarnings: "web_seller_earnings.json",
   transcripts: "auction_transcripts.json",
+  transcriptDetails: "auction_transcript_details.json",
 };
 
 type SellerEarningsPayload = {
@@ -42,6 +44,43 @@ export function defaultWebSettings(): WebSettingsPayload {
     staff_manager_ids: [OWNER_DISCORD_ID],
     updated_at: new Date().toISOString(),
   };
+}
+
+export function defaultWebStaffCommands(): WebStaffCommandsPayload {
+  return {
+    commands: [],
+    updated_at: new Date().toISOString(),
+  };
+}
+
+export async function getWebStaffCommands() {
+  const data = await getMirrorPayload<WebStaffCommandsPayload>(FILES.staffCommands, defaultWebStaffCommands());
+  return normalizeWebStaffCommands(data);
+}
+
+export async function saveWebStaffCommands(payload: WebStaffCommandsPayload) {
+  const normalized = normalizeWebStaffCommands(payload);
+  normalized.updated_at = new Date().toISOString();
+  await upsertMirrorPayload(FILES.staffCommands, normalized);
+  return normalized;
+}
+
+export async function appendWebStaffCommand(entry: Omit<WebStaffCommand, "id" | "created_at" | "status">) {
+  const payload = await getWebStaffCommands();
+  const command: WebStaffCommand = {
+    id: crypto.randomUUID(),
+    created_at: new Date().toISOString(),
+    status: "pending",
+    ...entry,
+  };
+  payload.commands.push(command);
+
+  // Keep file from growing forever, but preserve recent history for debugging.
+  const pending = payload.commands.filter(cmd => !cmd.processed_at && cmd.status !== "processed");
+  const processed = payload.commands.filter(cmd => cmd.processed_at || cmd.status === "processed").slice(-100);
+  payload.commands = [...processed, ...pending];
+
+  return await saveWebStaffCommands(payload);
 }
 
 export async function getAuctionStats() {
@@ -71,6 +110,9 @@ export async function getAuctionTranscripts() {
 export async function getAuctionTranscriptById(transcriptId: string) {
   const safeId = String(transcriptId || "").trim();
   if (!/^\d{10,25}$/.test(safeId)) return null;
+  const bundle = await getMirrorPayload<Record<string, any> | null>(FILES.transcriptDetails, null);
+  const bundledTranscript = bundle?.transcripts?.[safeId];
+  if (bundledTranscript) return bundledTranscript;
   return await getMirrorPayload<Record<string, any> | null>(`auction_transcript_${safeId}.json`, null);
 }
 
@@ -205,6 +247,44 @@ function normalizeSellerEarnings(input: Partial<SellerEarningsPayload> | null | 
   }
 
   out.updated_at = input.updated_at ? String(input.updated_at) : out.updated_at;
+  return out;
+}
+
+function normalizeWebStaffCommands(input: Partial<WebStaffCommandsPayload> | null | undefined): WebStaffCommandsPayload {
+  const out = defaultWebStaffCommands();
+  const commands = Array.isArray(input?.commands) ? input!.commands! : [];
+  const seen = new Set<string>();
+
+  for (const raw of commands as any[]) {
+    if (!raw || typeof raw !== "object") continue;
+    const id = String(raw.id || crypto.randomUUID());
+    if (seen.has(id)) continue;
+    seen.add(id);
+
+    const action = String(raw.action || "");
+    if (action !== "upsert_staff" && action !== "remove_staff") continue;
+
+    const staffId = String(raw.staff_id || raw.discord_id || "").trim();
+    if (!/^\d{10,25}$/.test(staffId)) continue;
+
+    const waitingCategoryId = raw.waiting_category_id ? String(raw.waiting_category_id).trim() : undefined;
+    if (waitingCategoryId && !/^\d{10,25}$/.test(waitingCategoryId)) continue;
+
+    out.commands.push({
+      id,
+      action,
+      staff_id: staffId,
+      waiting_category_id: waitingCategoryId,
+      note: raw.note ? String(raw.note) : undefined,
+      actor_id: raw.actor_id ? String(raw.actor_id) : undefined,
+      created_at: raw.created_at ? String(raw.created_at) : new Date().toISOString(),
+      status: raw.status === "processed" || raw.status === "error" ? raw.status : "pending",
+      processed_at: raw.processed_at ? String(raw.processed_at) : undefined,
+      error: raw.error ? String(raw.error) : undefined,
+    });
+  }
+
+  out.updated_at = input?.updated_at ? String(input.updated_at) : out.updated_at;
   return out;
 }
 

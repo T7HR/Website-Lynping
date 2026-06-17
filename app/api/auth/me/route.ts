@@ -6,5 +6,5 @@ import { getRoleForDiscordId } from "@/lib/roles";
 export async function GET() {
   const session = await getSession();
   const settings = await getWebSettings();
-  return NextResponse.json({ user: session, role: getRoleForDiscordId(session?.id, settings) });
+  return NextResponse.json({ user: session, role: await getRoleForDiscordId(session?.id, settings) });
 }

@@ -2,42 +2,77 @@ import Link from "next/link";
 import { avatarUrl } from "@/lib/session";
 import type { DiscordSession, Role } from "@/lib/types";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { ControlPanelDrawer, type ControlPanelItem } from "@/components/ControlPanelDrawer";
+import { ControlPanelDrawer, type ControlPanelItem, type ControlPanelSection } from "@/components/ControlPanelDrawer";
 import { LogoutButton } from "@/components/LogoutButton";
+import { roleLabel } from "@/lib/roleLabels";
 
-const sideNavByRole: Record<Role, ControlPanelItem[]> = {
+const staffItems: ControlPanelItem[] = [
+  { href: "/dashboard", label: "Dashboard", icon: "DB" },
+  { href: "/dashboard/requests", label: "คำขอ", icon: "RQ" },
+  { href: "/dashboard/auctions", label: "ประมูล", icon: "AC" },
+  { href: "/dashboard/transcripts", label: "ประวัติแชท", icon: "TR" },
+];
+
+const adminItems: ControlPanelItem[] = [
+  { href: "/dashboard", label: "Dashboard", icon: "DB" },
+  { href: "/dashboard/requests", label: "คำขอ", icon: "RQ" },
+  { href: "/dashboard/auctions", label: "ประมูล", icon: "AC" },
+  { href: "/dashboard/transcripts", label: "ประวัติแชท", icon: "TR" },
+  { href: "/dashboard/reports", label: "รายงาน", icon: "RP" },
+];
+
+const ownerDevItems: ControlPanelItem[] = [
+  { href: "/owner/logs", label: "Logs", icon: "LG" },
+  { href: "/owner/system", label: "System", icon: "SY" },
+];
+
+const ownerItems: ControlPanelItem[] = [
+  { href: "/owner", label: "Owner", icon: "OW" },
+  { href: "/owner/admins", label: "Admin", icon: "AD" },
+  { href: "/owner/staff", label: "Staff", icon: "ST" },
+];
+
+const staffSection: ControlPanelSection = {
+  title: "STAFF",
+  description: "เมนูพนักงาน",
+  items: staffItems,
+};
+
+const adminSectionForAdmin: ControlPanelSection = {
+  title: "ADMIN",
+  description: "เมนูแอดมิน",
+  items: adminItems,
+};
+
+const adminSectionForOwner: ControlPanelSection = {
+  title: "ADMIN",
+  description: "เมนูแอดมิน",
+  items: [{ href: "/dashboard/reports", label: "รายงาน", icon: "RP" }],
+};
+
+const ownerDevSection: ControlPanelSection = {
+  title: "OWNER.DEV",
+  description: "ระบบและบันทึก",
+  items: ownerDevItems,
+};
+
+const ownerSection: ControlPanelSection = {
+  title: "OWNER",
+  description: "จัดการสิทธิ์และระบบหลัก",
+  items: ownerItems,
+};
+
+const sideNavSectionsByRole: Record<Role, ControlPanelSection[]> = {
   guest: [],
   user: [],
-  staff: [
-    { href: "/dashboard", label: "Dashboard", icon: "DB", group: "หลังบ้าน" },
-    { href: "/dashboard/requests", label: "คำขอ", icon: "RQ" },
-    { href: "/dashboard/auctions", label: "ประมูล", icon: "AC" },
-    { href: "/dashboard/transcripts", label: "ประวัติแชท", icon: "TR" },
-    { href: "/dashboard/reports", label: "รายงาน", icon: "RP" },
-  ],
-  admin: [
-    { href: "/dashboard", label: "Dashboard", icon: "DB", group: "หลังบ้าน" },
-    { href: "/dashboard/requests", label: "คำขอ", icon: "RQ" },
-    { href: "/dashboard/auctions", label: "ประมูล", icon: "AC" },
-    { href: "/dashboard/transcripts", label: "ประวัติแชท", icon: "TR" },
-    { href: "/dashboard/reports", label: "รายงาน", icon: "RP" },
-  ],
-  owner: [
-    { href: "/dashboard", label: "Dashboard", icon: "DB", group: "หลังบ้าน" },
-    { href: "/dashboard/requests", label: "คำขอ", icon: "RQ" },
-    { href: "/dashboard/auctions", label: "ประมูล", icon: "AC" },
-    { href: "/dashboard/transcripts", label: "ประวัติแชท", icon: "TR" },
-    { href: "/dashboard/reports", label: "รายงาน", icon: "RP" },
-    { href: "/owner", label: "Owner", icon: "OW", group: "Owner" },
-    { href: "/owner/admins", label: "Admin", icon: "AD" },
-    { href: "/owner/staff", label: "Staff", icon: "ST" },
-    { href: "/owner/logs", label: "Logs", icon: "LG" },
-    { href: "/owner/system", label: "System", icon: "SY" },
-  ],
+  staff: [staffSection],
+  admin: [adminSectionForAdmin],
+  owner_dev: [staffSection, adminSectionForOwner, ownerDevSection, ownerSection],
+  owner: [staffSection, adminSectionForOwner, ownerDevSection, ownerSection],
 };
 
 export function SiteShell({ children, session, role }: { children: React.ReactNode; session: DiscordSession | null; role: Role }) {
-  const sideNav = sideNavByRole[role] || [];
+  const sideNavSections = sideNavSectionsByRole[role] || [];
   const img = avatarUrl(session, 64);
   const profileHref = session ? "/profile" : "/login";
 
@@ -57,7 +92,7 @@ export function SiteShell({ children, session, role }: { children: React.ReactNo
             <Link href="/" className="rounded-lg px-3 py-2 text-sm font-semibold text-zinc-300 hover:bg-white/10 hover:text-white">หน้าหลัก</Link>
             <Link href="/leaderboard" className="rounded-lg px-3 py-2 text-sm font-semibold text-zinc-300 hover:bg-white/10 hover:text-white">อันดับ</Link>
             <Link href={profileHref} className="rounded-lg px-3 py-2 text-sm font-semibold text-zinc-300 hover:bg-white/10 hover:text-white">โปรไฟล์</Link>
-            {sideNav.length > 0 && <ControlPanelDrawer items={sideNav} role={role} />}
+            {sideNavSections.length > 0 && <ControlPanelDrawer sections={sideNavSections} role={role} />}
           </nav>
 
           <div className="flex items-center gap-3">
@@ -66,7 +101,7 @@ export function SiteShell({ children, session, role }: { children: React.ReactNo
                 {img ? <img src={img} alt="avatar" className="h-9 w-9 rounded-lg object-cover" /> : <div className="h-9 w-9 rounded-lg bg-zinc-800" />}
                 <div className="hidden sm:block">
                   <p className="text-sm font-semibold">{session.global_name || session.username}</p>
-                  <p className="text-xs font-bold text-red-300">{role.toUpperCase()}</p>
+                  <p className="text-xs font-bold text-red-300">{roleLabel(role)}</p>
                 </div>
                 <ThemeToggle />
                 <LogoutButton />

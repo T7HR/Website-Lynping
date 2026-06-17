@@ -8,8 +8,8 @@ import { getSession } from "@/lib/session";
 export default async function LeaderboardPage() {
   const [stats, session] = await Promise.all([getAuctionStats(), getSession()]);
   const [sellers, winners] = await Promise.all([
-    withDiscordProfiles(toLeaderboardRows(stats, "sellers")),
-    withDiscordProfiles(toLeaderboardRows(stats, "winners")),
+    withDiscordProfiles(toLeaderboardRows(stats, "sellers"), null),
+    withDiscordProfiles(toLeaderboardRows(stats, "winners"), null),
   ]);
   const sellerRank = session ? getMyRank(sellers, session.id) : null;
   const winnerRank = session ? getMyRank(winners, session.id) : null;

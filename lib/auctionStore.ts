@@ -103,6 +103,11 @@ export async function getAuctionResults() {
   return await getMirrorPayload<Record<string, any>>(FILES.results, {});
 }
 
+export async function getAuctionArchiveCount() {
+  const payload = await getMirrorPayload<any>(FILES.archiveCount, { count: 0 });
+  return normalizeArchiveCount(payload);
+}
+
 export async function getAuctionTranscripts() {
   return await getMirrorPayload<Record<string, any> | any[]>(FILES.transcripts, {});
 }
@@ -213,6 +218,24 @@ export async function appendAuditLog(entry: Omit<AuditLogEntry, "id" | "created_
 
 export async function getAuditLogs() {
   return await getMirrorPayload<AuditLogEntry[]>(FILES.auditLogs, []);
+}
+
+function normalizeArchiveCount(input: any): number {
+  if (typeof input === "number") return Number.isFinite(input) ? Math.max(0, Math.floor(input)) : 0;
+  if (!input || typeof input !== "object") return 0;
+
+  const raw = pickValue(input, [
+    "count",
+    "total",
+    "value",
+    "archive_count",
+    "closed_count",
+    "closed_total",
+    "total_closed",
+  ]);
+
+  const amount = parseAmount(raw ?? 0);
+  return Number.isFinite(amount) ? Math.max(0, Math.floor(amount)) : 0;
 }
 
 function defaultSellerEarnings(): SellerEarningsPayload {

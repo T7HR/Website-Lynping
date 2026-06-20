@@ -1,9 +1,13 @@
 import { DailyReportCard, StaffMoneyCard } from "@/components/ReportCards";
+import { StaffMoneyLiveCard } from "@/components/StaffMoneyLiveCard";
 import { PageHeader } from "@/components/PageHeader";
 import { requireUser } from "@/lib/authGuard";
 import { getDailyReport, getStaffBonus, getStaffShop, getWebSettings } from "@/lib/auctionStore";
 import { withDiscordProfiles } from "@/lib/discordProfiles";
 import { getEnabledStaffIds, toDailyReportView, toStaffMoneyRows } from "@/lib/reportDisplay";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export default async function ReportsPage() {
   await requireUser("staff");
@@ -22,7 +26,13 @@ export default async function ReportsPage() {
       <PageHeader title="รายงานรวม" />
       <DailyReportCard report={{ ...dailyReport, topRoomRows, topAmountRows }} />
       <div className="grid gap-6 lg:grid-cols-2">
-        <StaffMoneyCard title="ยอดค้างชำระร้าน" rows={shopRows} emptyText="ยังไม่มีพนักงานในระบบ หรือยังไม่มียอดค้างชำระร้าน" />
+        <StaffMoneyLiveCard
+          title="ยอดค้างชำระร้าน"
+          initialRows={shopRows}
+          emptyText="ยังไม่มีพนักงานในระบบ หรือยังไม่มียอดค้างชำระร้าน"
+          apiPath="/api/reports/staff-shop"
+          pollMs={5 * 60 * 1000}
+        />
         <StaffMoneyCard title="โบนัสพนักงาน" rows={bonusRows} emptyText="ยังไม่มีพนักงานในระบบ หรือยังไม่มีข้อมูลโบนัส" />
       </div>
     </div>

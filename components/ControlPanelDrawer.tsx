@@ -45,8 +45,8 @@ export function ControlPanelDrawer({ sections, role }: { sections: ControlPanelS
   return (
     <>
       <button type="button" className="control-panel-trigger" onClick={() => setOpen(true)}>
-        <span className="control-panel-trigger-mark">CP</span>
-        หลังบ้าน
+        <span>หลังบ้าน</span>
+        <span className="control-panel-trigger-caret" aria-hidden="true" />
       </button>
 
       {open && mounted && createPortal(

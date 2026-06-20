@@ -8,6 +8,11 @@ import { getRoleForDiscordId } from "@/lib/roles";
 export const metadata: Metadata = {
   title: "Lynping Auction",
   description: "ร้านประมูล Lynping Auction ร้านประมูลที่ดีที่สุดในตอนนี้!!",
+  icons: {
+    icon: "/lynping.nobg.png",
+    shortcut: "/lynping.nobg.png",
+    apple: "/lynping.nobg.png",
+  },  
 };
 
 export const dynamic = "force-dynamic";

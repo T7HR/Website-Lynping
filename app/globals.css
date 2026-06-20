@@ -63,11 +63,11 @@ a {
 .control-panel-trigger {
   display: inline-flex;
   align-items: center;
-  gap: .55rem;
+  gap: .35rem;
   border-radius: .625rem;
   border: 1px solid rgba(248, 113, 113, .16);
   background: rgba(127, 29, 29, .18);
-  padding: .5rem .75rem;
+  padding: .5rem .72rem;
   color: rgb(228 228 231);
   font-size: .875rem;
   font-weight: 900;
@@ -85,17 +85,15 @@ a {
   transform: translateY(0) scale(.97);
 }
 
-.control-panel-trigger-mark {
-  display: grid;
-  height: 1.65rem;
-  min-width: 1.65rem;
-  place-items: center;
-  border-radius: .45rem;
-  background: rgb(185 28 28);
-  color: white;
-  font-size: .62rem;
-  font-weight: 1000;
-  box-shadow: 0 8px 20px rgba(185, 28, 28, .22);
+.control-panel-trigger-caret {
+  display: inline-block;
+  width: .42rem;
+  height: .42rem;
+  margin-left: .08rem;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  opacity: .82;
+  transform: translateY(-.12rem) rotate(45deg);
 }
 
 .control-panel-layer {

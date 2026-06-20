@@ -6,18 +6,22 @@ import { requireUser } from "@/lib/authGuard";
 import { getAuctionRequests, getAuctionResults, getAuctionStats, getStaffBonus, getStaffShop } from "@/lib/auctionStore";
 import { withDiscordProfiles } from "@/lib/discordProfiles";
 import { toLeaderboardRows } from "@/lib/leaderboard";
-import { toStaffMoneyRows } from "@/lib/reportDisplay";
+import { getEnabledStaffIds, toStaffMoneyRows } from "@/lib/reportDisplay";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export default async function DashboardPage() {
   const { settings } = await requireUser("staff");
   const [requests, results, stats, shop, bonus] = await Promise.all([getAuctionRequests(), getAuctionResults(), getAuctionStats(), getStaffShop(), getStaffBonus()]);
+  const staffIds = getEnabledStaffIds(settings);
   const requestRows = Object.values<any>(requests);
   const open = requestRows.filter(x => x.status === "pending").length;
   const [sellers, winners, shopRows, bonusRows] = await Promise.all([
     withDiscordProfiles(toLeaderboardRows(stats, "sellers").slice(0, 5), 5),
     withDiscordProfiles(toLeaderboardRows(stats, "winners").slice(0, 5), 5),
-    withDiscordProfiles(toStaffMoneyRows(shop, Object.keys(settings.staff)), 6),
-    withDiscordProfiles(toStaffMoneyRows(bonus, Object.keys(settings.staff)), 6),
+    withDiscordProfiles(toStaffMoneyRows(shop, staffIds).slice(0, 6), 6),
+    withDiscordProfiles(toStaffMoneyRows(bonus, staffIds).slice(0, 6), 6),
   ]);
   return (
     <div className="space-y-6">

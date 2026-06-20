@@ -13,7 +13,7 @@ export function DailyReportCard({ report }: { report: DailyReportView }) {
       <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
         <ReportMetric label="ลงห้องประมูลทั้งหมด" value={report.totalRooms} />
         <ReportMetric label="ปิดห้องประมูลทั้งหมด" value={report.closedRooms} />
-        <ReportMetric label="ยอดเปิดประมูลรวม" value={report.totalOpenAmount} />
+        <ReportMetric label="ยอดปิดประมูลรวม" value={report.totalOpenAmount} />
         <ReportMetric label="ยอดรวมพนักงานได้รับ" value={report.staffReceived} />
         <ReportMetric label="ยอดรวมร้านได้รับ" value={report.shopReceived} />
       </div>

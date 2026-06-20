@@ -8,17 +8,16 @@ import { roleLabel } from "@/lib/roleLabels";
 
 const staffItems: ControlPanelItem[] = [
   { href: "/dashboard", label: "Dashboard", icon: "DB" },
+  { href: "/dashboard/reports", label: "รายงาน", icon: "RP" },
   { href: "/dashboard/requests", label: "คำขอ", icon: "RQ" },
   { href: "/dashboard/auctions", label: "ประมูล", icon: "AC" },
   { href: "/dashboard/transcripts", label: "ประวัติแชท", icon: "TR" },
 ];
 
-const adminItems: ControlPanelItem[] = [
+const elevatedStaffItems: ControlPanelItem[] = [
   { href: "/dashboard", label: "Dashboard", icon: "DB" },
-  { href: "/dashboard/requests", label: "คำขอ", icon: "RQ" },
-  { href: "/dashboard/auctions", label: "ประมูล", icon: "AC" },
-  { href: "/dashboard/transcripts", label: "ประวัติแชท", icon: "TR" },
   { href: "/dashboard/reports", label: "รายงาน", icon: "RP" },
+  { href: "/dashboard/transcripts", label: "ประวัติแชท", icon: "TR" },
 ];
 
 const ownerDevItems: ControlPanelItem[] = [
@@ -38,16 +37,10 @@ const staffSection: ControlPanelSection = {
   items: staffItems,
 };
 
-const adminSectionForAdmin: ControlPanelSection = {
-  title: "ADMIN",
-  description: "เมนูแอดมิน",
-  items: adminItems,
-};
-
-const adminSectionForOwner: ControlPanelSection = {
-  title: "ADMIN",
-  description: "เมนูแอดมิน",
-  items: [{ href: "/dashboard/reports", label: "รายงาน", icon: "RP" }],
+const elevatedStaffSection: ControlPanelSection = {
+  title: "STAFF",
+  description: "เมนูพนักงาน",
+  items: elevatedStaffItems,
 };
 
 const ownerDevSection: ControlPanelSection = {
@@ -66,9 +59,9 @@ const sideNavSectionsByRole: Record<Role, ControlPanelSection[]> = {
   guest: [],
   user: [],
   staff: [staffSection],
-  admin: [adminSectionForAdmin],
-  owner_dev: [staffSection, adminSectionForOwner, ownerDevSection, ownerSection],
-  owner: [staffSection, adminSectionForOwner, ownerDevSection, ownerSection],
+  admin: [elevatedStaffSection],
+  owner_dev: [ownerSection, ownerDevSection, elevatedStaffSection],
+  owner: [ownerSection, ownerDevSection, elevatedStaffSection],
 };
 
 export function SiteShell({ children, session, role }: { children: React.ReactNode; session: DiscordSession | null; role: Role }) {

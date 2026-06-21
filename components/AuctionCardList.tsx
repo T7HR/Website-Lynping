@@ -5,14 +5,14 @@ export function AuctionCardList({ items, emptyText }: { items: AuctionCardItem[]
     <div className="grid gap-4 xl:grid-cols-2">
       {items.map(item => (
         <article key={item.id} className="card overflow-hidden">
-          <div className="aspect-[16/7] w-full overflow-hidden border-b border-white/10 bg-zinc-950">
+          <div className="auction-card-image aspect-[16/7] w-full overflow-hidden border-b border-white/10 bg-zinc-950">
             {item.imageUrl ? (
               <img src={item.imageUrl} alt={item.name} className="h-full w-full object-cover" />
             ) : (
               <div className="grid h-full place-items-center text-sm text-zinc-500">ไม่มีรูปสินค้า</div>
             )}
           </div>
-          <div className="space-y-4 p-5">
+          <div className="auction-card-body space-y-4 p-5">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
                 <p className="panel-title">Auction Item</p>
@@ -20,7 +20,7 @@ export function AuctionCardList({ items, emptyText }: { items: AuctionCardItem[]
               </div>
               <span className="badge">{item.status}</span>
             </div>
-            <div className="grid gap-3 sm:grid-cols-4">
+            <div className="auction-metrics grid gap-3 sm:grid-cols-4">
               <Metric label="เปิด" value={item.openPrice} />
               <Metric label="บิด" value={item.stepPrice} />
               <Metric label="ทุบ" value={item.buyoutPrice} />

@@ -4,7 +4,7 @@ import type { LeaderboardRow } from "@/lib/leaderboard";
 
 export function DailyReportCard({ report }: { report: DailyReportView }) {
   return (
-    <section className="card p-5">
+    <section className="card report-card p-5">
       <p className="panel-title">Daily Report</p>
       <h2 className="mt-1 text-xl font-black">สรุปประมูลประจำวัน</h2>
       <p className="mt-3 text-sm font-semibold text-zinc-300">รอบเวลา</p>
@@ -28,13 +28,13 @@ export function DailyReportCard({ report }: { report: DailyReportView }) {
 
 export function StaffMoneyCard({ title, rows, emptyText }: { title: string; rows: LeaderboardRow[]; emptyText: string }) {
   return (
-    <section className="card p-5">
+    <section className="card staff-money-card p-5">
       <p className="panel-title">Staff Balance</p>
       <h2 className="mt-1 text-xl font-black">{title}</h2>
       <div className="mt-4 divide-y divide-white/10">
         {rows.map(row => (
-          <div key={row.discordId} className="flex items-center justify-between gap-4 py-3">
-            <div className="flex min-w-0 items-center gap-3">
+          <div key={row.discordId} className="staff-money-row flex items-center justify-between gap-4 py-3">
+            <div className="staff-money-user flex min-w-0 items-center gap-3">
               <img
                 src={row.avatarUrl || "https://cdn.discordapp.com/embed/avatars/0.png"}
                 alt={row.displayName || row.discordId}
@@ -42,10 +42,10 @@ export function StaffMoneyCard({ title, rows, emptyText }: { title: string; rows
               />
               <div className="min-w-0">
                 <p className="truncate font-semibold">{row.displayName || row.discordId}</p>
-                <p className="text-xs text-zinc-500">Discord ID: {row.discordId}</p>
+                <p className="break-all text-xs text-zinc-500">Discord ID: {row.discordId}</p>
               </div>
             </div>
-            <p className="shrink-0 text-lg font-black text-red-300">{formatMoney(row.count)}</p>
+            <p className="staff-money-value shrink-0 text-lg font-black text-red-300">{formatMoney(row.count)}</p>
           </div>
         ))}
         {rows.length === 0 && <p className="py-3 text-sm text-zinc-400">{emptyText}</p>}
@@ -56,7 +56,7 @@ export function StaffMoneyCard({ title, rows, emptyText }: { title: string; rows
 
 function ReportMetric({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg border border-white/10 bg-black/20 p-4">
+    <div className="report-metric rounded-lg border border-white/10 bg-black/20 p-4">
       <p className="text-sm font-semibold text-zinc-300">{label}</p>
       <p className="mt-2 text-xl font-black text-white">{value}</p>
     </div>
@@ -69,7 +69,7 @@ function TopRows({ title, rows, unit }: { title: string; rows: LeaderboardRow[];
       <h3 className="font-black text-zinc-100">{title}</h3>
       <div className="mt-3 space-y-2">
         {rows.map((row, index) => (
-          <div key={`${row.discordId}-${index}`} className="flex items-center justify-between gap-3 rounded-lg bg-white/[0.04] px-3 py-2 text-sm">
+          <div key={`${row.discordId}-${index}`} className="top-row flex items-center justify-between gap-3 rounded-lg bg-white/[0.04] px-3 py-2 text-sm">
             <span className="min-w-0 truncate">
               #{index + 1} {row.displayName || row.discordId}
             </span>

@@ -78,8 +78,8 @@ export function StaffMoneyLiveCard({
   }, [refreshedAt]);
 
   return (
-    <section className="card p-5">
-      <div className="flex flex-wrap items-start justify-between gap-3">
+    <section className="card staff-money-card p-5">
+      <div className="staff-money-head flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="panel-title">Staff Balance</p>
           <h2 className="mt-1 text-xl font-black">{title}</h2>
@@ -89,7 +89,7 @@ export function StaffMoneyLiveCard({
           type="button"
           onClick={() => refreshBalance()}
           disabled={loading}
-          className="rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-xs font-bold text-zinc-200 hover:bg-white/[0.08] disabled:cursor-not-allowed disabled:opacity-50"
+          className="staff-refresh-btn rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-xs font-bold text-zinc-200 hover:bg-white/[0.08] disabled:cursor-not-allowed disabled:opacity-50"
         >
           {loading ? "กำลังอัปเดต..." : "รีเฟรชยอด"}
         </button>
@@ -99,8 +99,8 @@ export function StaffMoneyLiveCard({
 
       <div className="mt-4 divide-y divide-white/10">
         {rows.map(row => (
-          <div key={row.discordId} className="flex items-center justify-between gap-4 py-3">
-            <div className="flex min-w-0 items-center gap-3">
+          <div key={row.discordId} className="staff-money-row flex items-center justify-between gap-4 py-3">
+            <div className="staff-money-user flex min-w-0 items-center gap-3">
               <img
                 src={row.avatarUrl || "https://cdn.discordapp.com/embed/avatars/0.png"}
                 alt={row.displayName || row.discordId}
@@ -108,10 +108,10 @@ export function StaffMoneyLiveCard({
               />
               <div className="min-w-0">
                 <p className="truncate font-semibold">{row.displayName || row.discordId}</p>
-                <p className="text-xs text-zinc-500">Discord ID: {row.discordId}</p>
+                <p className="break-all text-xs text-zinc-500">Discord ID: {row.discordId}</p>
               </div>
             </div>
-            <p className="shrink-0 text-lg font-black text-red-300">{formatMoney(row.count)}</p>
+            <p className="staff-money-value shrink-0 text-lg font-black text-red-300">{formatMoney(row.count)}</p>
           </div>
         ))}
         {rows.length === 0 && <p className="py-3 text-sm text-zinc-400">{emptyText}</p>}

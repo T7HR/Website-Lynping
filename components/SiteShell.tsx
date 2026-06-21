@@ -72,32 +72,36 @@ export function SiteShell({ children, session, role }: { children: React.ReactNo
   return (
     <div className="min-h-screen">
       <header className="sticky top-0 z-50 border-b border-red-300/10 bg-zinc-950/86 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-4 lg:flex-row lg:items-center lg:justify-between">
-          <Link href="/" className="flex items-center gap-3">
-            <img src="/lynping.png?v=1" alt="Lynping Auction" className="h-12 w-12 rounded-lg border border-red-300/20 object-cover" />
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-red-300/70">Lynping Auction</p>
-              <h1 className="font-black text-white">ร้านประมูล Lynping</h1>
+        <div className="site-header-inner mx-auto flex max-w-7xl flex-col gap-4 px-4 py-4 lg:flex-row lg:items-center lg:justify-between">
+          <Link href="/" className="site-brand flex items-center gap-3">
+            <img src="/lynping.png?v=1" alt="Lynping Auction" className="site-brand-logo h-12 w-12 rounded-lg border border-red-300/20 object-cover" />
+            <div className="site-brand-text min-w-0">
+              <p className="truncate text-xs font-bold uppercase tracking-[0.18em] text-red-300/70">Lynping Auction</p>
+              <h1 className="truncate font-black text-white">ร้านประมูล Lynping</h1>
             </div>
           </Link>
 
-          <nav className="flex flex-wrap gap-2">
+          <nav className="site-nav flex flex-wrap gap-2">
             <Link href="/" className="rounded-lg px-3 py-2 text-sm font-semibold text-zinc-300 hover:bg-white/10 hover:text-white">หน้าหลัก</Link>
             <Link href="/leaderboard" className="rounded-lg px-3 py-2 text-sm font-semibold text-zinc-300 hover:bg-white/10 hover:text-white">อันดับ</Link>
             <Link href={profileHref} className="rounded-lg px-3 py-2 text-sm font-semibold text-zinc-300 hover:bg-white/10 hover:text-white">โปรไฟล์</Link>
             {sideNavSections.length > 0 && <ControlPanelDrawer sections={sideNavSections} role={role} />}
           </nav>
 
-          <div className="flex items-center gap-3">
+          <div className="site-user-actions flex items-center gap-3">
             {session ? (
               <>
-                {img ? <img src={img} alt="avatar" className="h-9 w-9 rounded-lg object-cover" /> : <div className="h-9 w-9 rounded-lg bg-zinc-800" />}
-                <div className="hidden sm:block">
-                  <p className="text-sm font-semibold">{session.global_name || session.username}</p>
-                  <p className="text-xs font-bold text-red-300">{roleLabel(role)}</p>
+                <div className="site-user-identity flex min-w-0 items-center gap-3">
+                  {img ? <img src={img} alt="avatar" className="site-user-avatar h-9 w-9 rounded-lg object-cover" /> : <div className="site-user-avatar h-9 w-9 rounded-lg bg-zinc-800" />}
+                  <div className="site-user-meta min-w-0">
+                    <p className="truncate text-sm font-semibold">{session.global_name || session.username}</p>
+                    <p className="truncate text-xs font-bold text-red-300">{roleLabel(role)}</p>
+                  </div>
                 </div>
-                <ThemeToggle />
-                <LogoutButton />
+                <div className="site-user-controls flex items-center gap-3">
+                  <ThemeToggle />
+                  <LogoutButton />
+                </div>
               </>
             ) : (
               <>
@@ -108,10 +112,10 @@ export function SiteShell({ children, session, role }: { children: React.ReactNo
           </div>
         </div>
       </header>
-      <div className="mx-auto max-w-7xl px-4 py-8">
+      <div className="site-main-wrap mx-auto max-w-7xl px-4 py-8">
         <main className="min-w-0 flex-1">{children}</main>
       </div>
-      <footer className="mx-auto max-w-7xl border-t border-white/10 px-4 py-10 text-sm text-zinc-500">© Lynping Auction — connected with Nextcord + Supabase JSON mirror</footer>
+      <footer className="site-footer mx-auto max-w-7xl border-t border-white/10 px-4 py-10 text-sm text-zinc-500">© Lynping Auction — connected with Nextcord + Supabase JSON mirror</footer>
     </div>
   );
 }

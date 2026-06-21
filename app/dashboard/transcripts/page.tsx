@@ -27,13 +27,13 @@ export default async function DashboardTranscriptsPage({ searchParams }: { searc
           <p className="mt-2 text-sm text-zinc-400">เมื่อบอท sync auction_transcripts.json แล้ว รายการจะขึ้นที่หน้านี้</p>
         </div>
       ) : (
-        <div className="grid gap-5 lg:grid-cols-[330px_minmax(0,1fr)]">
+        <div className="transcript-layout grid gap-5 lg:grid-cols-[330px_minmax(0,1fr)]">
           <aside className="card h-fit overflow-hidden">
             <div className="border-b border-white/10 p-4">
               <p className="panel-title">Transcripts</p>
               <p className="mt-1 text-sm text-zinc-400">{transcripts.length.toLocaleString("th-TH")} ห้อง</p>
             </div>
-            <div className="max-h-[72vh] overflow-y-auto p-2">
+            <div className="transcript-list max-h-[72vh] overflow-y-auto p-2">
               {transcripts.map((item) => {
                 const active = item.id === selected?.id;
                 return (
@@ -76,7 +76,7 @@ export default async function DashboardTranscriptsPage({ searchParams }: { searc
                 </div>
               </div>
 
-              <div className="max-h-[74vh] space-y-5 overflow-y-auto p-5">
+              <div className="transcript-messages max-h-[74vh] space-y-5 overflow-y-auto p-5">
                 {selected.messages.length === 0 ? (
                   <div className="rounded-lg border border-white/10 bg-white/[0.04] p-5 text-sm text-zinc-400">
                     transcript นี้ยังไม่มีข้อความ หรือ raw text ยังไม่อยู่ในรูปแบบที่อ่านได้
@@ -97,7 +97,7 @@ function TranscriptBubble({ message }: { message: TranscriptMessage }) {
   const initials = message.authorName.trim().slice(0, 2).toUpperCase() || "?";
 
   return (
-    <article className="flex gap-3">
+    <article className="transcript-bubble flex gap-3">
       {message.authorAvatarUrl ? (
         <img src={message.authorAvatarUrl} alt="" className="h-10 w-10 shrink-0 rounded-full object-cover" />
       ) : (

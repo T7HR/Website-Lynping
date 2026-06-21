@@ -37,7 +37,7 @@ export default async function HomePage() {
             </>
           }
         />
-        <div className="grid gap-4 md:grid-cols-4">
+        <div className="home-stats grid gap-4 md:grid-cols-4">
           <StatCard label="ผู้ลงของทั้งหมด" value={sellers.length} />
           <StatCard label="ผู้ชนะทั้งหมด" value={winners.length} />
           <StatCard label="คำขอ Pending" value={pending} />
@@ -45,7 +45,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="grid gap-5 md:grid-cols-4">
+      <section className="home-workflows grid gap-5 md:grid-cols-4">
         {[
           { title: "กฏร้านประมูล", text: "อ่านกฏภายในร้านประมูล", href: "https://sites.google.com/view/lynping-shop/กฏภายในราน?authuser=0", external: true },
           { title: "ว่าง", text: "รอใส่คำอธิบาย", href: "/history" },

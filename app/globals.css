@@ -644,3 +644,412 @@ a {
 :root[data-theme="light"] .control-panel-section-title small {
   color: rgba(63, 63, 70, .55);
 }
+
+/* Mobile fit pass: keep the dashboard comfortable on narrow screens */
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+img,
+video,
+canvas,
+svg {
+  max-width: 100%;
+}
+
+.site-nav {
+  min-width: 0;
+}
+
+.page-header-actions > a,
+.page-header-actions > button {
+  min-height: 2.75rem;
+}
+
+.owner-list-row,
+.leaderboard-row,
+.staff-money-row,
+.top-row {
+  min-width: 0;
+}
+
+.owner-list-meta {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 767px) {
+  body {
+    background-size: 34px 34px, 34px 34px, auto, auto, auto;
+  }
+
+  .site-header-inner {
+    gap: .8rem;
+    padding: .75rem .75rem .85rem;
+  }
+
+  .site-brand {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .site-brand-logo {
+    height: 2.45rem;
+    width: 2.45rem;
+    border-radius: .65rem;
+  }
+
+  .site-brand-text h1 {
+    font-size: .95rem;
+    line-height: 1.25rem;
+  }
+
+  .site-brand-text p {
+    max-width: calc(100vw - 5.5rem);
+    font-size: .62rem;
+    letter-spacing: .12em;
+  }
+
+  .site-nav {
+    order: 3;
+    width: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: .45rem;
+    overflow-x: auto;
+    padding-bottom: .18rem;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .site-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .site-nav a,
+  .site-nav button {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    font-size: .8rem;
+  }
+
+  .site-user-actions {
+    order: 1;
+    width: 100%;
+    justify-content: flex-start;
+    align-items: center;
+    gap: .6rem;
+  }
+
+  .site-user-identity {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .site-user-avatar {
+    height: 2.45rem;
+    width: 2.45rem;
+    border-radius: .75rem;
+    flex-shrink: 0;
+  }
+
+  .site-user-meta {
+    min-width: 0;
+  }
+
+  .site-user-meta p:first-child {
+    font-size: .92rem;
+    line-height: 1.1rem;
+  }
+
+  .site-user-meta p:last-child {
+    margin-top: .18rem;
+    font-size: .78rem;
+    letter-spacing: .01em;
+  }
+
+  .site-user-controls {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: .55rem;
+    flex-shrink: 0;
+  }
+
+  .site-user-controls .theme-toggle,
+  .site-user-controls .btn-ghost,
+  .site-user-controls button {
+    flex-shrink: 0;
+  }
+
+  .site-brand {
+    order: 2;
+  }
+
+  .site-main-wrap {
+    padding: 1.25rem .75rem 2rem;
+  }
+
+  .site-footer {
+    padding: 1.5rem .75rem 2rem;
+    font-size: .78rem;
+  }
+
+  .page-header {
+    margin-bottom: 1rem;
+    gap: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .page-header h1 {
+    font-size: clamp(1.55rem, 9vw, 2rem);
+    line-height: 1.12;
+    overflow-wrap: anywhere;
+  }
+
+  .page-header p:not(.panel-title) {
+    font-size: .85rem;
+    line-height: 1.55rem;
+  }
+
+  .page-header-actions {
+    width: 100%;
+  }
+
+  .page-header-actions > a,
+  .page-header-actions > button {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+
+  .card {
+    border-radius: .82rem;
+  }
+
+  .card.p-5,
+  .card.p-6,
+  .card.p-8,
+  .owner-form,
+  .report-card,
+  .staff-money-card,
+  .stat-card {
+    padding: 1rem !important;
+  }
+
+  .stat-card .h-1 {
+    margin-bottom: .75rem;
+  }
+
+  .stat-card-value {
+    font-size: 1.75rem;
+    line-height: 2rem;
+  }
+
+  .btn-primary,
+  .btn-ghost {
+    width: 100%;
+    min-height: 2.8rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .input {
+    min-height: 2.85rem;
+    padding: .8rem .9rem;
+    font-size: 16px;
+  }
+
+  .badge {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+
+  .control-panel-trigger {
+    padding: .48rem .65rem;
+    font-size: .82rem;
+  }
+
+  .control-panel-layer {
+    justify-content: center;
+  }
+
+  .control-panel-drawer {
+    width: min(100vw, 430px);
+    padding: .75rem;
+    border-left: 0;
+  }
+
+  .control-panel-drawer::before {
+    margin: -.75rem -.75rem .75rem;
+  }
+
+  .control-panel-drawer-head {
+    gap: .75rem;
+    padding: .85rem;
+  }
+
+  .control-panel-section-title {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: .2rem;
+  }
+
+  .control-panel-section-title small {
+    white-space: normal;
+  }
+
+  .sidebar-link {
+    gap: .65rem;
+    padding: .72rem .55rem;
+  }
+
+  .sidebar-link-icon {
+    height: 1.85rem;
+    width: 1.85rem;
+    border-radius: .48rem;
+  }
+
+  .home-stats,
+  .home-workflows {
+    gap: .75rem;
+  }
+
+  .leaderboard-card > div:first-child {
+    padding: 1rem;
+  }
+
+  .leaderboard-card h2,
+  .report-card h2,
+  .staff-money-card h2 {
+    font-size: 1.05rem;
+    line-height: 1.35rem;
+  }
+
+  .leaderboard-row {
+    align-items: flex-start;
+    gap: .75rem;
+    padding: .9rem 1rem;
+  }
+
+  .leaderboard-user {
+    gap: .75rem;
+  }
+
+  .leaderboard-value {
+    max-width: 38%;
+    text-align: right;
+    font-size: .95rem;
+    line-height: 1.25rem;
+  }
+
+  .staff-money-head {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .staff-refresh-btn {
+    width: 100%;
+  }
+
+  .staff-money-row,
+  .owner-list-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: .75rem;
+    padding: 1rem !important;
+  }
+
+  .staff-money-user,
+  .owner-list-user {
+    width: 100%;
+  }
+
+  .staff-money-value {
+    align-self: flex-end;
+    font-size: 1rem;
+  }
+
+  .mobile-action-btn {
+    width: 100%;
+  }
+
+  .owner-list-meta {
+    align-self: stretch;
+    text-align: left;
+  }
+
+  .auction-card-image {
+    aspect-ratio: 16 / 10;
+  }
+
+  .auction-card-body {
+    padding: 1rem;
+  }
+
+  .auction-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .report-metric {
+    padding: .8rem;
+  }
+
+  .report-metric p:last-child {
+    font-size: 1rem;
+    line-height: 1.35rem;
+    overflow-wrap: anywhere;
+  }
+
+  .top-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .transcript-layout {
+    gap: .85rem;
+  }
+
+  .transcript-list {
+    max-height: 38vh;
+  }
+
+  .transcript-messages {
+    max-height: 58vh;
+    padding: 1rem;
+  }
+
+  .transcript-bubble {
+    gap: .65rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .site-main-wrap {
+    padding-left: .55rem;
+    padding-right: .55rem;
+  }
+
+  .site-nav a,
+  .site-nav button {
+    font-size: .75rem;
+    padding-left: .6rem;
+    padding-right: .6rem;
+  }
+
+  .leaderboard-row {
+    flex-direction: column;
+  }
+
+  .leaderboard-value {
+    max-width: none;
+    align-self: flex-end;
+  }
+
+  .auction-metrics {
+    grid-template-columns: 1fr;
+  }
+}

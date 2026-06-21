@@ -18,8 +18,8 @@ export default async function OwnerAdminsPage() {
           {admins.map(a => {
             const profile = adminProfiles.find(row => row.discordId === a.id);
             return (
-              <div key={a.id} className="flex items-center justify-between gap-4 p-5 hover:bg-white/[0.03]">
-                <div className="flex min-w-0 items-center gap-3">
+              <div key={a.id} className="owner-list-row flex items-center justify-between gap-4 p-5 hover:bg-white/[0.03]">
+                <div className="owner-list-user flex min-w-0 items-center gap-3">
                   <img src={profile?.avatarUrl || "https://cdn.discordapp.com/embed/avatars/0.png"} alt={profile?.displayName || a.id} className="h-11 w-11 rounded-lg object-cover" />
                   <div className="min-w-0">
                     <h2 className="truncate font-black">{profile?.displayName || a.id}</h2>

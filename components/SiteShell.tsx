@@ -73,7 +73,7 @@ export function SiteShell({ children, session, role }: { children: React.ReactNo
     <div className="min-h-screen">
       <header className="sticky top-0 z-50 border-b border-red-300/10 bg-zinc-950/86 backdrop-blur-xl">
         <div className="site-header-inner mx-auto flex max-w-7xl flex-col gap-4 px-4 py-4 lg:flex-row lg:items-center lg:justify-between">
-          <Link href="/" className="site-brand flex items-center gap-3">
+          <Link href="/" prefetch={true} className="site-brand flex items-center gap-3">
             <img src="/lynping.png?v=1" alt="Lynping Auction" className="site-brand-logo h-12 w-12 rounded-lg border border-red-300/20 object-cover" />
             <div className="site-brand-text min-w-0">
               <p className="truncate text-xs font-bold uppercase tracking-[0.18em] text-red-300/70">Lynping Auction</p>
@@ -82,9 +82,9 @@ export function SiteShell({ children, session, role }: { children: React.ReactNo
           </Link>
 
           <nav className="site-nav flex flex-wrap gap-2">
-            <Link href="/" className="rounded-lg px-3 py-2 text-sm font-semibold text-zinc-300 hover:bg-white/10 hover:text-white">หน้าหลัก</Link>
-            <Link href="/leaderboard" className="rounded-lg px-3 py-2 text-sm font-semibold text-zinc-300 hover:bg-white/10 hover:text-white">อันดับ</Link>
-            <Link href={profileHref} className="rounded-lg px-3 py-2 text-sm font-semibold text-zinc-300 hover:bg-white/10 hover:text-white">โปรไฟล์</Link>
+            <Link href="/" prefetch={true} className="rounded-lg px-3 py-2 text-sm font-semibold text-zinc-300 hover:bg-white/10 hover:text-white">หน้าหลัก</Link>
+            <Link href="/leaderboard" prefetch={true} className="rounded-lg px-3 py-2 text-sm font-semibold text-zinc-300 hover:bg-white/10 hover:text-white">อันดับ</Link>
+            <Link href={profileHref} prefetch={true} className="rounded-lg px-3 py-2 text-sm font-semibold text-zinc-300 hover:bg-white/10 hover:text-white">โปรไฟล์</Link>
             {sideNavSections.length > 0 && <ControlPanelDrawer sections={sideNavSections} role={role} />}
           </nav>
 
@@ -106,7 +106,7 @@ export function SiteShell({ children, session, role }: { children: React.ReactNo
             ) : (
               <>
                 <ThemeToggle />
-                <Link className="btn-primary py-2" href="/login">Login Discord</Link>
+                <Link className="btn-primary py-2" href="/login" prefetch={true}>Login Discord</Link>
               </>
             )}
           </div>

@@ -81,6 +81,7 @@ export function ControlPanelDrawer({ sections, role }: { sections: ControlPanelS
                         <Link
                           key={`${section.title}-${item.href}`}
                           href={item.href}
+                          prefetch={true}
                           className="sidebar-link"
                           style={{ animationDelay: `${animationIndex * 45}ms` }}
                           onClick={() => setOpen(false)}

@@ -2,7 +2,7 @@ import "server-only";
 
 const DISCORD_API = "https://discord.com/api/v10";
 const DEFAULT_TIMEOUT_MS = 3500;
-const ROLE_CACHE_TTL_MS = Number(process.env.DISCORD_ROLE_CACHE_TTL_MS || "0");
+const ROLE_CACHE_TTL_MS = Number(process.env.DISCORD_ROLE_CACHE_TTL_MS ?? "5000");
 
 export const DISCORD_ROLE_IDS = {
   admin: process.env.DISCORD_ADMIN_ROLE_ID || "1443210704332263440",
@@ -32,7 +32,7 @@ export async function getDiscordGuildRoleIds(discordId: string | null | undefine
   if (ROLE_CACHE_TTL_MS > 0 && cached && cached.expiresAt > now) return cached.roles;
 
   // กันการยิง Discord API ซ้ำพร้อมกันหลายครั้งในช่วงรีเฟรชหน้าเดียวกัน
-  // แต่ถ้า DISCORD_ROLE_CACHE_TTL_MS=0 จะไม่เก็บ cache ข้าม request/refresh
+  // ถ้าตั้ง DISCORD_ROLE_CACHE_TTL_MS=0 จะไม่เก็บ cache ข้าม request/refresh
   const inFlight = inFlightRoleFetches.get(id);
   if (inFlight) return inFlight;
 

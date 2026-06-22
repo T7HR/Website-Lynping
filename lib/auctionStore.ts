@@ -18,6 +18,7 @@ export const FILES = {
   staffCommands: "web_staff_commands.json",
   auditLogs: "web_audit_logs.json",
   sellerEarnings: "web_seller_earnings.json",
+  userEarnings: "auction_user_earnings.json",
   transcripts: "auction_transcripts.json",
   transcriptDetails: "auction_transcript_details.json",
 };
@@ -32,6 +33,19 @@ type SellerEarningsPayload = {
     seller_id: string;
     customer_amount: number;
     synced_at: string;
+  }>;
+  updated_at?: string;
+};
+
+type UserEarningsPayload = {
+  users: Record<string, {
+    total_customer_amount: number;
+    closed_count: number;
+    total_winning_bid_amount: number;
+    won_bid_count: number;
+    updated_at?: string;
+    last_result_id?: string;
+    last_winning_result_id?: string;
   }>;
   updated_at?: string;
 };
@@ -115,14 +129,19 @@ export async function getAuctionTranscripts() {
 export async function getAuctionTranscriptById(transcriptId: string) {
   const safeId = String(transcriptId || "").trim();
   if (!/^\d{10,25}$/.test(safeId)) return null;
+
+  // รายละเอียด transcript ถูกเก็บรวมใน auction_transcript_details.json เท่านั้น
+  // ไม่อ่านไฟล์/row แบบ auction_transcript_<id>.json แยกอีกแล้ว
   const bundle = await getMirrorPayload<Record<string, any> | null>(FILES.transcriptDetails, null);
-  const bundledTranscript = bundle?.transcripts?.[safeId];
-  if (bundledTranscript) return bundledTranscript;
-  return await getMirrorPayload<Record<string, any> | null>(`auction_transcript_${safeId}.json`, null);
+  return bundle?.transcripts?.[safeId] || null;
 }
 
 export async function getSellerEarnings() {
   return normalizeSellerEarnings(await getMirrorPayload<SellerEarningsPayload>(FILES.sellerEarnings, defaultSellerEarnings()));
+}
+
+export async function getAuctionUserEarnings() {
+  return normalizeUserEarnings(await getMirrorPayload<UserEarningsPayload>(FILES.userEarnings, defaultUserEarnings()));
 }
 
 export async function syncSellerEarningsFromResults(results: Record<string, any>) {
@@ -266,6 +285,35 @@ function normalizeSellerEarnings(input: Partial<SellerEarningsPayload> | null | 
       seller_id: sellerId,
       customer_amount: parseAmount(value?.customer_amount),
       synced_at: value?.synced_at ? String(value.synced_at) : new Date().toISOString(),
+    };
+  }
+
+  out.updated_at = input.updated_at ? String(input.updated_at) : out.updated_at;
+  return out;
+}
+
+function defaultUserEarnings(): UserEarningsPayload {
+  return {
+    users: {},
+    updated_at: new Date().toISOString(),
+  };
+}
+
+function normalizeUserEarnings(input: Partial<UserEarningsPayload> | null | undefined): UserEarningsPayload {
+  const out = defaultUserEarnings();
+  if (!input || typeof input !== "object") return out;
+
+  for (const [discordId, value] of Object.entries<any>(input.users || {})) {
+    const id = String(discordId);
+    if (!/^\d{10,25}$/.test(id)) continue;
+    out.users[id] = {
+      total_customer_amount: parseAmount(value?.total_customer_amount),
+      closed_count: Math.max(0, Number(value?.closed_count || 0)),
+      total_winning_bid_amount: parseAmount(value?.total_winning_bid_amount),
+      won_bid_count: Math.max(0, Number(value?.won_bid_count || 0)),
+      updated_at: value?.updated_at ? String(value.updated_at) : undefined,
+      last_result_id: value?.last_result_id ? String(value.last_result_id) : undefined,
+      last_winning_result_id: value?.last_winning_result_id ? String(value.last_winning_result_id) : undefined,
     };
   }
 

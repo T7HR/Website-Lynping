@@ -3,20 +3,24 @@ import { PageHeader } from "@/components/PageHeader";
 import { StatCard } from "@/components/StatCard";
 import { requireUser } from "@/lib/authGuard";
 import { avatarUrl } from "@/lib/session";
-import { getAuctionResults, getAuctionStats, syncSellerEarningsFromResults } from "@/lib/auctionStore";
+import { getAuctionStats, getAuctionUserEarnings } from "@/lib/auctionStore";
 import { getMyRank, toLeaderboardRows } from "@/lib/leaderboard";
 import { roleLabel } from "@/lib/roleLabels";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function ProfilePage() {
   const { session, role } = await requireUser("user");
-  const [stats, results] = await Promise.all([getAuctionStats(), getAuctionResults()]);
-  const earnings = await syncSellerEarningsFromResults(results);
+  const [stats, earnings] = await Promise.all([getAuctionStats(), getAuctionUserEarnings()]);
   const sellers = toLeaderboardRows(stats, "sellers");
   const winners = toLeaderboardRows(stats, "winners");
   const img = avatarUrl(session, 256);
   const sellerCount = sellers.find(x => x.discordId === session.id)?.count || 0;
   const winnerCount = winners.find(x => x.discordId === session.id)?.count || 0;
-  const sellerEarning = earnings.users[session.id]?.total_customer_amount || 0;
+  const myEarnings = earnings.users[session.id];
+  const sellerEarning = myEarnings?.total_customer_amount || 0;
+  const winningBidAmount = myEarnings?.total_winning_bid_amount || 0;
   return (
     <div className="space-y-6">
       <PageHeader title="โปรไฟล์ของฉัน" description="ข้อมูลผู้ใช้ภายในเซิร์ฟเวอร์ Lynping" />
@@ -29,10 +33,11 @@ export default async function ProfilePage() {
         </div>
         <Link className="btn-primary" href="/profile/stats">ดูสถิติละเอียด</Link>
       </div>
-      <div className="grid gap-4 md:grid-cols-5">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-6">
         <StatCard label="ลงของประมูล" value={sellerCount} />
         <StatCard label="ชนะประมูล" value={winnerCount} />
         <StatCard label="ยอดที่ได้จากการลงประมูลทั้งหมด" value={sellerEarning.toLocaleString("en-US")} />
+        <StatCard label="ยอดที่ลงประมูลทั้งหมด" value={winningBidAmount.toLocaleString("en-US")} />
         <StatCard label="อันดับลงของ" value={getMyRank(sellers, session.id) || "-"} />
         <StatCard label="อันดับชนะ" value={getMyRank(winners, session.id) || "-"} />
       </div>
